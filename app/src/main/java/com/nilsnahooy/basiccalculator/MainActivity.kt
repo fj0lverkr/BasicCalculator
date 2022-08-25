@@ -9,14 +9,14 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import java.util.ArrayList
 
 class MainActivity : AppCompatActivity() {
-    private var inputPreview: String? = null
+    private var inputString: String? = null
     private var result: Double? = null
     private var resultTV: TextView? = null
+    private var operator: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         val buttons: ArrayList<View>? = findViewById<LinearLayoutCompat>(R.id.activity_wrapper)
             .touchables
@@ -35,15 +35,51 @@ class MainActivity : AppCompatActivity() {
         resultTV = findViewById(R.id.calc_result_tv)
         val btn = v as Button
         when(btn.text){
-            "CLR" -> inputPreview = ""
+            "CLR" -> {
+                inputString = ""
+                result = 0.0
+            }
+            "+", "-", "X", "%" -> {
+                if (operator != null) {
+                    val op: String = operator as String
+                    result = calculate(result, inputString, op)
+                    resultTV?.text = result?.toString() ?: "divide by zero error"
+                }
+                operator = btn.text as String
+            }
+            "=" -> {}
             else -> {
-                inputPreview = if(inputPreview == null || inputPreview == ""){
+                inputString = if(inputString == null || inputString == ""){
                     btn.text as String?
                 }else{
-                    "$inputPreview${btn.text as String?}"
+                    "$inputString${btn.text as String}"
                 }
+                resultTV?.text = inputString
             }
         }
-       resultTV?.text = inputPreview
     }
+
+    private fun calculate(result: Double?, input: String?, operator: String): Double? {
+        var prev: Double? = result
+        var inputDouble: Double? = input?.toDoubleOrNull()
+        if (inputDouble == null){
+           inputDouble = 0.0
+        }
+        if (prev == null) {
+            prev = 0.0
+        }
+        return when(operator) {
+            "+" -> prev + inputDouble
+            "-" -> prev - inputDouble
+            "%" -> {
+                if(inputDouble != 0.0){
+                    prev/inputDouble
+                }else{
+                    null
+                }
+            }
+            else -> prev * inputDouble
+        }
+    }
+
 }

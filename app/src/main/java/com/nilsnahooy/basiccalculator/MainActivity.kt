@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                 inputString = ""
                 result = 0.0
             }
-            "+", "-", "X", "%" -> {
+            "+", "-", "X", "/" -> {
                 if (operator != null) {
                     val op: String = operator as String
                     result = calculate(result, inputString, op)
@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
         return when(operator) {
             "+" -> prev + inputDouble
             "-" -> prev - inputDouble
-            "%" -> {
+            "/" -> {
                 if(inputDouble != 0.0){
                     prev/inputDouble
                 }else{

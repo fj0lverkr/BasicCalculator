@@ -38,20 +38,39 @@ class MainActivity : AppCompatActivity() {
             "CLR" -> {
                 inputString = ""
                 result = 0.0
+                resultTV?.text = inputString
             }
             "+", "-", "X", "/" -> {
                 if (operator != null) {
                     val op: String = operator as String
                     result = calculate(result, inputString, op)
                     resultTV?.text = result?.toString() ?: "divide by zero error"
+                }else{
+                    result = inputString?.toDoubleOrNull()
+                    inputString = ""
                 }
                 operator = btn.text as String
+                //inputString = operator
             }
-            "=" -> {}
+            "=" -> {
+                if (operator != null) {
+                    val op: String = operator as String
+                    result = calculate(result, inputString, op)
+                    inputString = ""
+                    resultTV?.text = result?.toString() ?: "divide by zero error"
+                } else {
+                    result = inputString?.toDoubleOrNull()
+                    resultTV?.text = inputString ?: "0.0"
+                    inputString = ""
+                }
+            }
             else -> {
-                inputString = if(inputString == null || inputString == ""){
+                inputString = if((inputString == null || inputString == "")
+                    && !btn.text.contains("([\\-+/X])+")) {
                     btn.text as String?
-                }else{
+                } else if (btn.text.contains("([\\-+/X])+")) {
+                    inputString
+                } else {
                     "$inputString${btn.text as String}"
                 }
                 resultTV?.text = inputString

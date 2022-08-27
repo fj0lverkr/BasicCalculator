@@ -12,8 +12,10 @@
     <string name="zero">0</string>
     <string name="plus">+</string>
     <string name="minus">-</string>
-    <string name="divide">/</string>
+    <string name="divide">÷</string>
+    <string name="divide_op">/</string>
     <string name="multiply">x</string>
+    <string name="multiply_op">*</string>
     <string name="equals">=</string>
     <string name="clear">CLR</string>
 </resources>

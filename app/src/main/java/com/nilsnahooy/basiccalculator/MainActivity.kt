@@ -11,7 +11,7 @@ import java.util.ArrayList
 class MainActivity : AppCompatActivity() {
     private var inputStringMap: MutableMap<String, String?> = mutableMapOf("firstVal" to "",
         "operator" to "", "secondVal" to "")
-    private var inputString: String? = null
+    private var inputString: String = ""
     private var result: Double? = null
     private var resultTV: TextView? = null
     private var operator: String? = null
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         val btn = v as Button
         when(btn.tag){
             "CLR" -> {
-                resetInput()
+                resetInput("")
                 result = 0.0
                 resultTV?.text = ""
             }
@@ -46,35 +46,29 @@ class MainActivity : AppCompatActivity() {
                 if (operator != null) {
                     inputStringMap["secondVal"] = inputString
                     result = calculate(inputStringMap)
-                    resetInput()
-                    inputStringMap["firstVal"] = result.toString()
+                    resetInput(result.toString())
                     inputStringMap["operator"] =  btn.tag as String
                     resultTV?.text = result?.toString() ?: "divide by zero error"
                 }else{
-                    inputStringMap["firstVal"] = inputString
+                    if(inputStringMap["firstVal"] == "") resetInput(inputString)
                     inputStringMap["operator"] =  btn.tag as String
-                    inputString = null
+                    inputString = ""
                     resultTV?.text = btn.text
                 }
                 operator = btn.tag as String
             }
             "=" -> {
-                if (operator != null) {
-                    inputStringMap["secondVal"] = inputString
-                    result = calculate(inputStringMap)
-                    resetInput()
-                    inputStringMap["firstVal"] = result.toString()
-                    resultTV?.text = result?.toString() ?: "divide by zero error"
-                } else {
-                    result = inputString?.toDoubleOrNull()
-                    resultTV?.text = inputString ?: "0.0"
-                }
+                inputStringMap["secondVal"] = inputString
+                result = calculate(inputStringMap)
+                resultTV?.text = result?.toString() ?: "divide by zero error"
+                operator = null
+                resetInput(result.toString())
             }
             else -> {
-                inputString = if(inputString == null || inputString == "") {
-                    btn.text as String?
+                inputString = if(inputString == "") {
+                    btn.tag as String
                 } else {
-                    "$inputString${btn.text as String}"
+                    "$inputString${btn.tag as String}"
                 }
                 resultTV?.text = inputString
             }
@@ -109,10 +103,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun resetInput(){
-        inputStringMap["firstVal"] = ""
+    private fun resetInput(firstVal:String){
+        inputStringMap["firstVal"] = firstVal
         inputStringMap["operator"] = ""
         inputStringMap["secondVal"] = ""
-        inputString = null
+        inputString = ""
     }
 }

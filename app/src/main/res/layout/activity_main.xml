@@ -184,7 +184,7 @@
             android:textSize="18sp"
             android:padding="24dp"
             android:text="@string/minus"
-            android:tag="minus"
+            android:tag="@string/minus"
             style="?android:attr/buttonBarButtonStyle" />
     </LinearLayout>
     <LinearLayout

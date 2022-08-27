@@ -9,7 +9,8 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import java.util.ArrayList
 
 class MainActivity : AppCompatActivity() {
-    private var inputStringList: MutableList<String> = mutableListOf()
+    private var inputStringMap: MutableMap<String, String?> = mutableMapOf("firstVal" to "",
+        "operator" to "", "secondVal" to "")
     private var inputString: String? = null
     private var result: Double? = null
     private var resultTV: TextView? = null
@@ -35,36 +36,34 @@ class MainActivity : AppCompatActivity() {
     private fun handleClick(v:View) {
         resultTV = findViewById(R.id.calc_result_tv)
         val btn = v as Button
-        when(btn.text){
+        when(btn.tag){
             "CLR" -> {
-                inputStringList = mutableListOf()
+                resetInput()
                 result = 0.0
-                inputString = null
                 resultTV?.text = ""
             }
-            "+", "-", "X", "/" -> {
+            "+", "-", "*", "/" -> {
                 if (operator != null) {
-                    inputStringList.add(2, inputString as String)
-                    result = calculate(inputStringList)
-                    inputStringList = mutableListOf()
-                    inputStringList.add(0, result.toString())
-                    inputStringList.add(1, btn.text as String)
+                    inputStringMap["secondVal"] = inputString
+                    result = calculate(inputStringMap)
+                    resetInput()
+                    inputStringMap["firstVal"] = result.toString()
+                    inputStringMap["operator"] =  btn.tag as String
                     resultTV?.text = result?.toString() ?: "divide by zero error"
                 }else{
-                    inputStringList.add(0,inputString as String)
-                    inputStringList.add(1, btn.text as String)
+                    inputStringMap["firstVal"] = inputString
+                    inputStringMap["operator"] =  btn.tag as String
                     inputString = null
-                    resultTV?.text = operator
+                    resultTV?.text = btn.text
                 }
-                operator = btn.text as String
+                operator = btn.tag as String
             }
             "=" -> {
                 if (operator != null) {
-                    inputStringList.add(2, inputString as String)
-                    result = calculate(inputStringList)
-                    inputString = null
-                    inputStringList = mutableListOf()
-                    inputStringList.add(0, result.toString())
+                    inputStringMap["secondVal"] = inputString
+                    result = calculate(inputStringMap)
+                    resetInput()
+                    inputStringMap["firstVal"] = result.toString()
                     resultTV?.text = result?.toString() ?: "divide by zero error"
                 } else {
                     result = inputString?.toDoubleOrNull()
@@ -82,11 +81,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun calculate(input: List<String>): Double? {
+    private fun calculate(input: Map<String, String?>): Double? {
         if (input.size == 3) {
-            var firstNumber: Double? = input[0].toDoubleOrNull()
-            var secondNumber: Double? = input[2].toDoubleOrNull()
-            val operator: String = input[1]
+            var firstNumber: Double? = input["firstVal"]?.toDoubleOrNull()
+            var secondNumber: Double? = input["secondVal"]?.toDoubleOrNull()
+            val operator: String? = input["operator"]
             if (firstNumber == null){
                 firstNumber = 0.0
             }
@@ -110,4 +109,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun resetInput(){
+        inputStringMap["firstVal"] = ""
+        inputStringMap["operator"] = ""
+        inputStringMap["secondVal"] = ""
+        inputString = null
+    }
 }

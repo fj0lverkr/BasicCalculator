@@ -222,10 +222,22 @@
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:paddingVertical="24dp"
             android:tag="@string/zero"
             android:text="@string/zero"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/decimal_btn"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:paddingVertical="24dp"
+            android:tag="@string/decimal"
+            android:text="@string/decimal"
             android:textSize="18sp" />
 
         <Button

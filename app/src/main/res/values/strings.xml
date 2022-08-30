@@ -18,4 +18,5 @@
     <string name="multiply_op">*</string>
     <string name="equals">=</string>
     <string name="clear">CLR</string>
+    <string name="decimal">.</string>
 </resources>
